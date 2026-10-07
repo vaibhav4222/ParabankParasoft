@@ -1,0 +1,8 @@
+.venv/
+.tools/
+__pycache__/
+.pytest_cache/
+reports/
+test-results/
+.env
+*.lock

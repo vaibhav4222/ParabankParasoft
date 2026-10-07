@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TransactionHistory",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "accountId", "type", "date", "amount", "description"],
+    "properties": {
+      "id": {"type": "integer", "minimum": 1},
+      "accountId": {"type": "integer", "minimum": 1},
+      "type": {"enum": ["Credit", "Debit"]},
+      "date": {"type": "integer", "minimum": 0},
+      "amount": {"type": "number", "minimum": 0},
+      "description": {"type": "string"}
+    }
+  }
+}
