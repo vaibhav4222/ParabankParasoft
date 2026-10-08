@@ -5,6 +5,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+def format_duration(seconds: float) -> str:
+    if seconds == 0:
+        return "0ms"
+    if 0 < seconds < 0.00001:
+        return "<0.01ms"
+    if seconds < 1:
+        return f"{seconds * 1000:.2f}ms"
+    return f"{seconds:.2f}s"
+
+
 def write_dashboard(results: list[dict], target: Path, exit_code: int):
     target.parent.mkdir(parents=True, exist_ok=True)
     counts = {status: sum(r["status"] == status for r in results)
@@ -18,7 +28,7 @@ def write_dashboard(results: list[dict], target: Path, exit_code: int):
         artifacts = ''.join(f'<a href="{html.escape(link, quote=True)}">{html.escape(label)}</a> '
                             for label, link in result.get("artifacts", []))
         rows.append(f'<tr data-status="{result["status"]}"><td>{html.escape(result["name"])}{detail}{artifacts}</td>'
-                    f'<td class="{result["status"]}">{result["status"].upper()}</td><td>{result["duration"]:.2f}s</td></tr>')
+                    f'<td class="{result["status"]}">{result["status"].upper()}</td><td>{html.escape(format_duration(result["duration"]))}</td></tr>')
     timestamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
     document = '''<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>ParaBank QA | Test Dashboard</title>
